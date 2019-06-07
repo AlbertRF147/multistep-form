@@ -7,7 +7,7 @@
         </div>
         <div class="field">
           <div class="control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="store.state.survey.name">
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
         </div>
         <div class="field">
           <div class="control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="store.state.survey.description">
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
             <button class="button is-info">-</button>
           </p>
           <p class="control is-center">
-            <input v-model="questions" @input="updateQuestions" type="text" class="input">
+            <input v-model="store.state.survey.number_of_questions" type="text" class="input">
           </p>
           <p class="control">
             <button class="button is-info">+</button>
@@ -49,7 +49,7 @@
             <button class="button is-info">-</button>
           </p>
           <p class="control is-center">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="store.state.survey.response_goal">
           </p>
           <p class="control">
             <button class="button is-info">+</button>
@@ -63,7 +63,7 @@
         </div>
         <div class="field">
           <p class="control">
-            <input class="input" type="date">
+            <Datepicker :id="'start_date'" :key="'start_date'" @date-updated="updateDate"></Datepicker>
           </p>
         </div>
 
@@ -72,7 +72,7 @@
         </div>
         <div class="field">
           <p class="control">
-            <input class="input" type="date">
+            <Datepicker :id="'end_date'" :key="'end_date'" @date-updated="updateDate"></Datepicker>
           </p>
         </div>
       </div>
@@ -83,7 +83,7 @@
         </div>
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="time">
+            <input class="input" type="time" v-model="store.state.survey.start_time">
             <span class="icon is-small is-left">
               <i class="fas fa-clock"></i>
             </span>
@@ -95,7 +95,7 @@
         </div>
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="time">
+            <input class="input" type="time" v-model="store.state.survey.end_time">
             <span class="icon is-small is-left">
               <i class="fas fa-clock"></i>
             </span>
@@ -109,7 +109,7 @@
         </div>
         <div class="field">
           <p class="control">
-            <input class="input" type="date">
+           <Datepicker :id="'created_date'" :key="'created_date'" @date-updated="updateDate"></Datepicker>
           </p>
         </div>
 
@@ -118,7 +118,7 @@
         </div>
         <div class="field has-addons">
           <p class="control is-center">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="store.state.survey.trunk">
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@
           <p class="label">Use Survey Skip Logic?</p>
         </div>
         <div class="field">
-          <input id="switchLogic" type="checkbox" name="switchLogic" class="switch" @change="updateSkipLogic">
+          <input id="switchLogic" type="checkbox" name="switchLogic" class="switch" v-model="store.state.survey.skip_logic">
           <label for="switchLogic">Enable</label>
         </div>
       </div>
@@ -139,7 +139,7 @@
           <p class="label">Enable AMD?</p>
         </div>
         <div class="field">
-          <input id="switchAMD" type="checkbox" name="switchAMD" class="switch">
+          <input id="switchAMD" type="checkbox" name="switchAMD" class="switch" v-model="store.state.survey.amd">
           <label for="switchAMD">Enable</label>
         </div>
       </div>
@@ -160,6 +160,7 @@
             value="50"
             step="10"
             type="range"
+			v-model="store.state.survey.timeout"
           >
         </div>
       </div>
@@ -179,6 +180,7 @@
             value="5"
             step="1"
             type="range"
+			v-model="store.state.survey.channels"
           >
         </div>
       </div>
@@ -203,6 +205,7 @@
               value="50"
               step="1"
               type="range"
+			  v-model="store.state.survey.audio_volume"
             >
           </div>
         </div>
@@ -215,20 +218,26 @@
 <script>
 import { store } from "../store";
 import { EventBus } from "../event-bus/event-bus";
-import bulmaCalendar from "bulma-calendar";
 import Dropzone from "./Dropzone.vue";
+import Datepicker from "./Datepicker.vue";
 
 export default {
   name: "Start",
   components: {
-    'Dropzone': Dropzone
+	'Dropzone': Dropzone,
+	'Datepicker': Datepicker
   },
   data() {
     return {
-      store
+	  store,
+	  questions: store.state.survey.number_of_questions
     }
   },
   methods: {
+	  updateDate(data) {
+		  store.state.survey[data.id] = data.date
+	  }
+	  /*
     updateQuestions() {
       if (this.questions > 10) {
         this.questions = 0;
@@ -238,7 +247,8 @@ export default {
     updateSkipLogic(e) {
       this.useSkipLogic = e.currentTarget.checked;
       EventBus.$emit('skip-logic-updated', this.useSkipLogic);
-    }
+	}
+	*/
   },
   mounted() {
 
@@ -312,26 +322,6 @@ export default {
         }
       });
     });
-
-    // Initialize all input of date type.
-    const calendars = bulmaCalendar.attach('[type="date"]');
-
-    // Loop on each calendar initialized
-    calendars.forEach(calendar => {
-      // Add listener to date:selected event
-      calendar.on("date:selected", date => {
-        console.log(date);
-      });
-    });
-
-    // To access to bulmaCalendar instance of an element
-    const element = document.querySelector("#my-element");
-    if (element) {
-      // bulmaCalendar instance is available as element.bulmaCalendar
-      element.bulmaCalendar.on("select", datepicker => {
-        console.log(datepicker.data.value());
-      });
-    }
   }
 };
 </script>

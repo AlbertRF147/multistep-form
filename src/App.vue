@@ -1,14 +1,9 @@
 <template>
   <div id="app" class="container box">
-    <Navigation :questions="questions"></Navigation>
-    <keep-alive>
-      <router-view
-        :questions="questions"
-        :uploadedFiles="uploadedFiles"
-        :useSkipLogic="useSkipLogic"
-        :key="$route.path"
-      ></router-view>
-    </keep-alive>
+    <Navigation></Navigation>
+    <Keep-Alive>
+      <router-view :key="$route.path"></router-view>
+    </Keep-Alive>
   </div>
 </template>
 
