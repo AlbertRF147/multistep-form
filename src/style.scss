@@ -1,0 +1,29 @@
+@import "bulma";
+@import "/node_modules/bulma-slider/dist/css/bulma-slider.min.css";
+@import "/node_modules/bulma-switch/dist/css/bulma-switch.min.css";
+@import "/node_modules/bulma-calendar/dist/css/bulma-calendar.min.css";
+
+html {
+  min-height: 100%
+}
+
+body {
+  min-height: 100vh;
+  background: #ebf8ff;
+}
+
+h1 {
+  color: red;
+}
+
+.level-item {
+  margin: 0 6px;
+}
+
+.is-parent {
+  flex-wrap: wrap;
+}
+
+.navigation {
+  margin-bottom: 16px;
+}
