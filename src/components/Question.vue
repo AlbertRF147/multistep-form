@@ -6,13 +6,13 @@
         <div class="field">
           <div class="label">Survey ID</div>
           <div class="control">
-            <input type="text" class="input" v-model="question.survey_id">
+            <input type="text" class="input" v-model="store.state.details.survey_id">
           </div>
         </div>
         <div class="field">
           <div class="label">Question (Prompt)</div>
           <div class="control">
-            <input type="text" class="input" v-model="question.question">
+            <input type="text" class="input" v-model="store.state.question.question">
           </div>
         </div>
       </div>
@@ -21,8 +21,8 @@
           <div class="label">Question Audio File</div>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select v-model="question.audio_file">
-                <option v-for="file in $attrs.uploadedFiles" :key="file">{{ file }}</option>
+              <select v-model="store.state.question.audio_file">
+                <option v-for="file in store.state.files" :key="file">{{ file }}</option>
               </select>
             </div>
             <span class="icon is-small is-left">
@@ -33,7 +33,7 @@
         <div class="field">
           <div class="label">Question Label (e.g. "3-5")</div>
           <div class="control">
-            <input type="text" class="input" v-model="question.question_label">
+            <input type="text" class="input" v-model="store.state.question.label">
           </div>
         </div>
       </div>
@@ -53,50 +53,14 @@
       :answer_id="answer.id"
       :use_skip_logic="$attrs.useSkipLogic"
     ></Answer>
-
-    <!-- Tiles -->
-    <!-- <div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <div v-for="i in this.items" :key="i.id" class="tile is-child is-4 box is-radiusless">
-          <input type="checkbox" v-model="i.checked">
-          DMFT {{ i.label }}
-          <div v-show="i.checked">
-            <div class="field">
-              <div class="label">Answer</div>
-              <div class="field">
-                <div class="control">
-                  <div class="select">
-                    <select>
-                      <option>Yes</option>
-                      <option>No</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="control">
-                  <div class="select">
-                    <select>
-                      <option
-                        v-for="n in parseInt($attrs.questions)|0"
-                        :key="n"
-                        value
-                      >Go To Question {{n}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>-->
   </div>
 </template>
 
 <script>
 import { EventBus } from "../event-bus/event-bus";
 import Answer from "./Answer.vue";
+import { store } from "../store";
+
 export default {
   name: "Question",
   components: {
@@ -104,20 +68,8 @@ export default {
   },
   data() {
     return {
-      //questions: 0,
-      question: {
-        id: this.$route.path.slice(
-          this.$route.path.length - 1,
-          this.$route.path.length
-        ),
-        survey_id: "",
-        question: "",
-        question_label: "",
-        audio_file: "",
-        answers: []
-      },
-      answers: []
-    };
+		store
+	};
   },
   created() {
     EventBus.$on("questions-updated", questions => {

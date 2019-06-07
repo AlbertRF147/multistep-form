@@ -15,7 +15,7 @@
           <div class="field control">
             <div class="select is-fullwidth">
               <select>
-                <option v-for="n in parseInt($attrs.questions)|0" :key="n" value>Question {{n}}</option>
+                <option v-for="n in parseInt(store.state.survey.muber_of_questions)|0" :key="n" value>Question {{n}}</option>
               </select>
             </div>
           </div>
@@ -29,7 +29,7 @@
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select name id>
-                <option v-for="file in $attrs.uploadedFiles" :key="file">{{ file }}</option>
+                <option v-for="file in store.state.uploaded_files" :key="file">{{ file }}</option>
               </select>
             </div>
             <span class="icon is-small is-left">
@@ -44,7 +44,7 @@
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select name id>
-                <option v-for="file in $attrs.uploadedFiles" :key="file">{{ file }}</option>
+                <option v-for="file in store.state.uploaded_files" :key="file">{{ file }}</option>
               </select>
             </div>
             <span class="icon is-small is-left">
@@ -59,11 +59,13 @@
 
 <script>
 import { EventBus } from "../event-bus/event-bus";
+import { store } from "../store";
+
 export default {
   name: "Details",
   data() {
     return {
-      questions: 0
+      store
     };
   },
   mounted() {

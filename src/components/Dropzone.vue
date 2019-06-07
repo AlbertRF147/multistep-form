@@ -11,6 +11,8 @@
 import vue2Dropzone from 'vue2-dropzone';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import { EventBus } from "../event-bus/event-bus";
+import { store } from "../store";
+
 export default {
   name: 'app',
   components: {
@@ -29,7 +31,7 @@ export default {
   },
   methods: {
     getUploadedFiles(file, response) {
-      EventBus.$emit('uploaded-files', file.name)
+      store.state.uploaded_files.push(file.name)
     }
   }
 }

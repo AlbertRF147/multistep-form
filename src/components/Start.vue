@@ -31,13 +31,18 @@
         </div>
         <div class="field has-addons">
           <p class="control">
-            <button class="button is-info">-</button>
+            <button class="button is-info" @click="removeQuestion">-</button>
           </p>
           <p class="control is-center">
-            <input v-model="store.state.survey.number_of_questions" type="text" class="input">
+            <input
+              v-model="store.state.survey.number_of_questions"
+              type="text"
+              class="input"
+              disabled
+            >
           </p>
           <p class="control">
-            <button class="button is-info">+</button>
+            <button class="button is-info" @click="addQuestion">+</button>
           </p>
         </div>
 
@@ -109,7 +114,7 @@
         </div>
         <div class="field">
           <p class="control">
-           <Datepicker :id="'created_date'" :key="'created_date'" @date-updated="updateDate"></Datepicker>
+            <Datepicker :id="'created_date'" :key="'created_date'" @date-updated="updateDate"></Datepicker>
           </p>
         </div>
 
@@ -130,7 +135,13 @@
           <p class="label">Use Survey Skip Logic?</p>
         </div>
         <div class="field">
-          <input id="switchLogic" type="checkbox" name="switchLogic" class="switch" v-model="store.state.survey.skip_logic">
+          <input
+            id="switchLogic"
+            type="checkbox"
+            name="switchLogic"
+            class="switch"
+            v-model="store.state.survey.skip_logic"
+          >
           <label for="switchLogic">Enable</label>
         </div>
       </div>
@@ -139,7 +150,13 @@
           <p class="label">Enable AMD?</p>
         </div>
         <div class="field">
-          <input id="switchAMD" type="checkbox" name="switchAMD" class="switch" v-model="store.state.survey.amd">
+          <input
+            id="switchAMD"
+            type="checkbox"
+            name="switchAMD"
+            class="switch"
+            v-model="store.state.survey.amd"
+          >
           <label for="switchAMD">Enable</label>
         </div>
       </div>
@@ -160,7 +177,7 @@
             value="50"
             step="10"
             type="range"
-			v-model="store.state.survey.timeout"
+            v-model="store.state.survey.timeout"
           >
         </div>
       </div>
@@ -180,7 +197,7 @@
             value="5"
             step="1"
             type="range"
-			v-model="store.state.survey.channels"
+            v-model="store.state.survey.channels"
           >
         </div>
       </div>
@@ -205,7 +222,7 @@
               value="50"
               step="1"
               type="range"
-			  v-model="store.state.survey.audio_volume"
+              v-model="store.state.survey.audio_volume"
             >
           </div>
         </div>
@@ -224,34 +241,36 @@ import Datepicker from "./Datepicker.vue";
 export default {
   name: "Start",
   components: {
-	'Dropzone': Dropzone,
-	'Datepicker': Datepicker
+    Dropzone: Dropzone,
+    Datepicker: Datepicker
   },
   data() {
     return {
-	  store,
-	  questions: store.state.survey.number_of_questions
-    }
+      store,
+      questions: store.state.survey.number_of_questions
+    };
   },
   methods: {
-	  updateDate(data) {
-		  store.state.survey[data.id] = data.date
-	  }
-	  /*
-    updateQuestions() {
-      if (this.questions > 10) {
-        this.questions = 0;
-      }
-      EventBus.$emit("questions-updated", this.questions);
+    updateDate(data) {
+      store.state.survey[data.id] = data.date;
     },
-    updateSkipLogic(e) {
-      this.useSkipLogic = e.currentTarget.checked;
-      EventBus.$emit('skip-logic-updated', this.useSkipLogic);
+    addQuestion() {
+      let count = store.state.questions.length;
+      store.state.questions.push({
+        id: count,
+        question: "",
+        label: "",
+        audio_file: "",
+        answers: []
+	  });
+	  store.state.survey.number_of_questions++;
+	},
+	removeQuestion() {
+		store.state.questions.pop();
+		store.state.survey.number_of_questions-=1;
 	}
-	*/
   },
   mounted() {
-
     // Find output DOM associated to the DOM element passed as parameter
     function findOutputForSlider(element) {
       var idVal = element.id;
