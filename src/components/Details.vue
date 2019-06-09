@@ -5,7 +5,7 @@
         <div class="field">
           <div class="label">Survey ID</div>
           <div class="field control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="store.state.details.survey_id" disabled >
           </div>
         </div>
       </div>
@@ -14,8 +14,8 @@
           <div class="label">Response Tracking Question</div>
           <div class="field control">
             <div class="select is-fullwidth">
-              <select>
-                <option v-for="n in parseInt(store.state.survey.muber_of_questions)|0" :key="n" value>Question {{n}}</option>
+              <select >
+                <option v-for="n in parseInt(store.state.survey.number_of_questions)|0" :key="n" value>Question {{n}}</option>
               </select>
             </div>
           </div>
@@ -28,7 +28,7 @@
           <div class="label">Select Intro Audio File</div>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select name id>
+              <select name id v-model="store.state.details.intro_audio_file" >
                 <option v-for="file in store.state.uploaded_files" :key="file">{{ file }}</option>
               </select>
             </div>
@@ -43,7 +43,7 @@
           <div class="label">Select Hangup Audio File</div>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select name id>
+              <select name id v-model="store.state.details.hangup_audio_file">
                 <option v-for="file in store.state.uploaded_files" :key="file">{{ file }}</option>
               </select>
             </div>

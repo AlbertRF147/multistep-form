@@ -4,6 +4,7 @@
     id="dropzone"
     :options="dropzoneOptions"
     @vdropzone-success="getUploadedFiles"
+    @vdropzone-removed-file="removeUploadedFile"
   ></vue-dropzone>
 </template>
 
@@ -32,6 +33,11 @@ export default {
   methods: {
     getUploadedFiles(file, response) {
       store.state.uploaded_files.push(file.name)
+    },
+    removeUploadedFile(file) {
+      store.state.uploaded_files.forEach( (e, i) => {
+        if(e == file.name) store.state.uploaded_files.splice(i, 1)
+      });
     }
   }
 }

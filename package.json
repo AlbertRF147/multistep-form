@@ -41,6 +41,7 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
+    "uuid": "^3.3.2",
     "vue2-dropzone": "^3.5.9"
   }
 }

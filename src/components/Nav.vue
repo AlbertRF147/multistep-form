@@ -1,7 +1,7 @@
 <template>
   <div class="navigation">
     <nav class="level" v-if="parseInt(store.state.survey.number_of_questions) > 0">
-      <router-link class="level-item button is-info" to="/preview">Preview Survey</router-link>
+      <router-link class="level-item button" to="/preview">Preview Survey</router-link>
     </nav>
     <nav class="level">
       <router-link class="level-item button" to="/">Start</router-link>
@@ -23,8 +23,8 @@ export default {
   name: "Navigation",
   data() {
 	  return {
-		  store
+      store,
 	  }
-  }
+  },
 };
 </script>

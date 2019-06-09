@@ -27,3 +27,37 @@ h1 {
 .navigation {
   margin-bottom: 16px;
 }
+
+.dropzone .dz-preview {
+  z-index: 0 !important;
+}
+
+.question-row-labels {
+  margin-bottom: 0;
+}
+
+.columns.answers {
+  margin: 0;
+}
+
+.columns.answers .column {
+  padding: 8px 20px 0;
+}
+
+.form-section {
+  border-top: 1px solid lightgrey;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.form-section-label {
+  font-size: 1.2rem;
+  margin-top: 20px;
+  padding: 0 0 0 8px;
+  letter-spacing: 2px;
+}
+
+.router-link-exact-active {
+  background: #209cee !important;
+  color: #fff !important;
+}

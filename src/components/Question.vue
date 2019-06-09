@@ -6,13 +6,13 @@
         <div class="field">
           <div class="label">Survey ID</div>
           <div class="control">
-            <input type="text" class="input" v-model="store.state.details.survey_id">
+            <input type="text" class="input" v-model="store.state.details.survey_id" disabled >
           </div>
         </div>
         <div class="field">
           <div class="label">Question (Prompt)</div>
           <div class="control">
-            <input type="text" class="input" v-model="store.state.question.question">
+            <input type="text" class="input" v-model="store.state.questions[question_id].question" >
           </div>
         </div>
       </div>
@@ -21,8 +21,8 @@
           <div class="label">Question Audio File</div>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select v-model="store.state.question.audio_file">
-                <option v-for="file in store.state.files" :key="file">{{ file }}</option>
+              <select v-model="store.state.questions[question_id].audio_file" >
+                <option v-for="file in store.state.uploaded_files" :key="file">{{ file }}</option>
               </select>
             </div>
             <span class="icon is-small is-left">
@@ -33,7 +33,7 @@
         <div class="field">
           <div class="label">Question Label (e.g. "3-5")</div>
           <div class="control">
-            <input type="text" class="input" v-model="store.state.question.label">
+            <input type="text" class="input" v-model="store.state.questions[question_id].label" >
           </div>
         </div>
       </div>
@@ -47,11 +47,10 @@
 
     <!-- Answer row -->
     <Answer
-      v-for="answer in question.answers"
+      v-for="answer in store.state.questions[question_id].answers"
       :key="answer.id"
-      :questions="$attrs.questions"
       :answer_id="answer.id"
-      :use_skip_logic="$attrs.useSkipLogic"
+      :question_id="question_id"
     ></Answer>
   </div>
 </template>
@@ -68,33 +67,23 @@ export default {
   },
   data() {
     return {
-		store
-	};
-  },
-  created() {
-    EventBus.$on("questions-updated", questions => {
-      this.questions = questions;
-    });
-    EventBus.$on("answer-removed", answer_id => {
-      this.question.answers.forEach((e, i) => {
-        if (e.id == answer_id) this.question.answers.splice(i, 1);
-      });
-    });
+      store,
+      question_id: this.$route.params.id - 1
+    };
   },
   methods: {
     addAnswer() {
-      this.question.answers.push({
-        id: uuid(),
-        answer: "",
-        action: ""
-      });
+      let answers_count = this.store.state.questions[this.question_id].answers.length || 0;
+      this.store.state.questions[this.question_id].answers.push({
+        id: answers_count,
+        answer: '',
+        dtmf: '',
+        goto_question: 0
+      })
+    },
+    test() {
+      debugger
     }
   }
 };
-
-function uuid() {
-  return Math.random()
-    .toString(16)
-    .slice(2);
-}
 </script>

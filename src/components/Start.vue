@@ -7,7 +7,7 @@
         </div>
         <div class="field">
           <div class="control">
-            <input type="text" class="input" v-model="store.state.survey.name">
+            <input type="text" class="input" v-model="store.state.survey.name" >
           </div>
         </div>
       </div>
@@ -39,6 +39,7 @@
               type="text"
               class="input"
               disabled
+              
             >
           </p>
           <p class="control">
@@ -51,13 +52,13 @@
         </div>
         <div class="field has-addons">
           <p class="control">
-            <button class="button is-info">-</button>
+            <button class="button is-info" @click="removeResponseGoal">-</button>
           </p>
           <p class="control is-center">
-            <input type="text" class="input" v-model="store.state.survey.response_goal">
+            <input type="text" class="input" v-model="store.state.survey.response_goal" disabled >
           </p>
           <p class="control">
-            <button class="button is-info">+</button>
+            <button class="button is-info" @click="addResponseGoal">+</button>
           </p>
         </div>
       </div>
@@ -88,7 +89,7 @@
         </div>
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="time" v-model="store.state.survey.start_time">
+            <input class="input" type="time" v-model="store.state.survey.start_time" >
             <span class="icon is-small is-left">
               <i class="fas fa-clock"></i>
             </span>
@@ -100,7 +101,7 @@
         </div>
         <div class="field">
           <p class="control has-icons-left">
-            <input class="input" type="time" v-model="store.state.survey.end_time">
+            <input class="input" type="time" v-model="store.state.survey.end_time" >
             <span class="icon is-small is-left">
               <i class="fas fa-clock"></i>
             </span>
@@ -121,10 +122,10 @@
         <div class="field">
           <p class="label">Trunk</p>
         </div>
-        <div class="field has-addons">
-          <p class="control is-center">
-            <input type="text" class="input" v-model="store.state.survey.trunk">
-          </p>
+        <div class="select is-fullwidth">
+          <select v-model="store.state.survey.trunk" >
+            <option>99999</option>
+          </select>
         </div>
       </div>
     </div>
@@ -164,7 +165,7 @@
         <div class="field">
           <p class="label has-output">
             Timeout
-            <output for="sliderTimeout">50</output>
+            <output for="sliderTimeout" >30</output>
             Seconds (5 Rings)
           </p>
         </div>
@@ -172,12 +173,13 @@
           <input
             id="sliderTimeout"
             class="slider is-fullwidth"
-            min="0"
-            max="100"
-            value="50"
-            step="10"
+            min="12"
+            max="120"
+            value="30"
+            step="1"
             type="range"
             v-model="store.state.survey.timeout"
+            
           >
         </div>
       </div>
@@ -185,7 +187,7 @@
         <div class="field">
           <p class="label has-output">
             Channels:
-            <output for="sliderChannels">5</output>
+            <output for="sliderChannels" >5</output>
           </p>
         </div>
         <div class="field control">
@@ -198,6 +200,7 @@
             step="1"
             type="range"
             v-model="store.state.survey.channels"
+            
           >
         </div>
       </div>
@@ -208,7 +211,7 @@
         <div class="field">
           <div class="label has-output">
             Audio Volume
-            <output for="sliderVolume">50</output>
+            <output for="sliderVolume" >0.25</output>
             %
           </div>
         </div>
@@ -218,15 +221,19 @@
               id="sliderVolume"
               class="slider is-fullwidth"
               min="0"
-              max="100"
-              value="50"
-              step="1"
+              max="2"
+              value="0.25"
+              step="0.05"
               type="range"
               v-model="store.state.survey.audio_volume"
+              
             >
           </div>
         </div>
       </div>
+    </div>
+    <div class="field">
+      <div class="label">Audio Files</div>
     </div>
     <Dropzone></Dropzone>
   </div>
@@ -252,7 +259,8 @@ export default {
   },
   methods: {
     updateDate(data) {
-      store.state.survey[data.id] = data.date;
+      let date = new Date(data.date)
+      store.state.survey[data.id] = date.toLocaleDateString();
     },
     addQuestion() {
       let count = store.state.questions.length;
@@ -262,13 +270,23 @@ export default {
         label: "",
         audio_file: "",
         answers: []
-	  });
-	  store.state.survey.number_of_questions++;
-	},
-	removeQuestion() {
-		store.state.questions.pop();
-		store.state.survey.number_of_questions-=1;
-	}
+      });
+      store.state.survey.number_of_questions++;
+    },
+    removeQuestion() {
+      if (this.store.state.survey.number_of_questions > 1) {
+        store.state.questions.pop();
+        store.state.survey.number_of_questions -= 1;
+      }
+    },
+    addResponseGoal() {
+      this.store.state.survey.response_goal += 25;
+    },
+    removeResponseGoal() {
+      if (this.store.state.survey.response_goal >= 25) {
+        this.store.state.survey.response_goal -= 25;
+      }
+    }
   },
   mounted() {
     // Find output DOM associated to the DOM element passed as parameter
@@ -336,7 +354,7 @@ export default {
             }
 
             // Update output with slider value
-            output.value = event.target.value;
+            output.value = event.target.id == 'sliderVolume' ? Number.parseFloat(event.target.value).toFixed(2) : event.target.value;
           });
         }
       });

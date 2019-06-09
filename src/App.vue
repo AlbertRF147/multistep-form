@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container box">
+    <h1 class="title is-3">Phone Survey</h1>
     <Navigation></Navigation>
     <Keep-Alive>
       <router-view :key="$route.path"></router-view>
@@ -20,8 +21,5 @@ export default {
 
     };
   },
-  mounted() {
-    
-  }
 };
 </script>

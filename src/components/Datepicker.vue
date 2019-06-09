@@ -1,6 +1,6 @@
 <template>
 	<div>
-		 <input ref="calendarTrigger" type="date">
+		 <input ref="calendarTrigger" type="date" data-date-format="YYYY-MM-DD" >
 	</div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   data() {
     return {
 		id: this.$attrs.id,
-      	date: new Date()
+    date: this.$attrs.id == 'created_date' ? new Date().toLocaleDateString() : ''
     }
   },
  mounted() {
@@ -21,15 +21,8 @@ export default {
     })[0]
     calendar.on('select', e => {
 		this.date = e.data.startDate || null;
-		this.$emit('date-updated', {date: this.date.toLocaleString(), id: this.id});
+		this.$emit('date-updated', {date: this.date, id: this.id});
 	})
-  },
-  computed: {
-    niceDate() {
-      if (this.date) {
-        return this.date.toLocaleDateString()
-      }
-    }
   }
 };
 </script>

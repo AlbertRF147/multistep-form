@@ -1,30 +1,40 @@
+const uuidv1 = require('uuid/v1');
+
 export const store = {
 	state: {
 		survey: {
 			name: '',
 			description: '',
-			number_of_questions: 0,
+			number_of_questions: 1,
 			response_goal: 0,
 			start_date: null,
 			end_date: null,
 			start_time: '',
 			end_time: '',
-			created_date: null,
+			created_date: new Date().toLocaleDateString(),
 			trunk: '',
 			skip_logic: false,
 			amd: false,
-			timeout: 0,
-			channels: 0,
-			audio_volume: 0
+			timeout: 30,
+			channels: 5,
+			audio_volume: 0.25
 		},
 		details: {
-			survey_id: '',
+			survey_id: uuidv1(),
 			response_tracking_question: 0,
 			intro_audio_file: '',
 			hangup_audio_file: ''
 		},
 		uploaded_files: [],
-		questions: [],
+		questions: [
+			{
+				id: 0,
+				question: '',
+				label: '',
+				audio_file: '',
+				answers: []
+			}
+		],
 
 	}
 }

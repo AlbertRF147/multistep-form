@@ -6,7 +6,7 @@
       </div>
       <div class="field">
         <div class="control">
-          <input type="text" class="input" v-model="answer.answer">
+          <input type="text" class="input" v-model="store.state.questions[question_id].answers[answer_id].answer">
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
       <div class="field">
         <div class="control">
           <div class="select is-fullwidth">
-            <select name id v-model="answer.dmft">
+            <select name id v-model="store.state.questions[question_id].answers[answer_id].dtmf">
               <option v-for="key in keys" :key="key.uuid">{{ key.label }}</option>
             </select>
           </div>
@@ -27,8 +27,9 @@
     <div
       class="column is-3"
       v-if="
-        $attrs.use_skip_logic == true &&
-        parseInt($route.path.slice( $route.path.length - 1, $route.path.length )) !== parseInt($attrs.questions)"
+        store.state.survey.skip_logic == true &&
+        question_id !== store.state.questions.length - 1
+      "
     >
       <div class="field">
         <div class="label">Skip Action</div>
@@ -36,9 +37,9 @@
       <div class="field">
         <div class="control">
           <div class="select is-fullwidth">
-            <select name id v-model="answer.skip_action">
+            <select name id v-model="store.state.questions[question_id].answers[answer_id].goto_question">
               <option
-                v-for="question in parseInt($attrs.questions)|0"
+                v-for="question in store.state.survey.number_of_questions"
                 :key="question"
               >Go To Question {{ question }}</option>
             </select>
@@ -51,7 +52,7 @@
         <div class="label" style="visibility: hidden;">'</div>
       </div>
       <div class="field">
-        <button class="button is-danger" @click="removeAnswer($attrs.answer_id)">
+        <button class="button is-danger" @click="removeAnswer()">
           <span class="icon is-small">
             <i class="fas fa-times"></i>
           </span>
@@ -63,6 +64,8 @@
 
 <script>
 import { EventBus } from "../event-bus/event-bus";
+import { store } from "../store";
+
 export default {
   name: "Answer",
   data() {
@@ -82,25 +85,14 @@ export default {
         { id: 11, label: 0 },
         { id: 12, label: "#" }
       ],
-      answer: {
-        id: this.$attrs.answer_id,
-        answer: "",
-        dmft: "",
-        skip_action: ""
-      }
+      store,
+      question_id: this.$attrs.question_id,
+      answer_id: this.$attrs.answer_id
     };
   },
-  mounted() {
-    var elements = document.querySelectorAll("input, select");
-    Array.from(elements).forEach( (e, i) => {
-      e.onchange = () => {
-        EventBus.$emit('field-updated', this.answer)
-      };
-    });
-  },
   methods: {
-    removeAnswer(answer) {
-      EventBus.$emit("answer-removed", answer);
+    removeAnswer() {
+      store.state.questions[this.question_id].answers.splice(this.answer_id, 1)
     }
   }
 };
