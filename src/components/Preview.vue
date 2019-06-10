@@ -99,18 +99,18 @@
     <div class="form-section-label">Questions Data</div>
     <div class="form-section">
       <div class="columns question-row-labels">
-        <div class="column is-5">
+        <div class="column is-7">
           <div class="label">Question (Prompt)</div>
         </div>
         <div class="column is-3">
           <div class="label">Question Audio File</div>
         </div>
-        <div class="column is-4">
+        <div class="column is-2">
           <div class="label">Question Label</div>
         </div>
       </div>
       <div class="columns questions" v-for="question in store.state.questions" :key="question.id">
-        <div class="column is-5">
+        <div class="column is-7">
           <div class="form-field"> {{ question.question }} </div>
           <div class="columns answers" v-for="answer in question.answers" :key="answer.id">
             <div class="column is-4"> DTMF: {{ answer.dtmf }} </div>

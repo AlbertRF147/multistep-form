@@ -11,7 +11,7 @@ import { store } from "../store";
 export default {
   data() {
     return {
-		id: this.$attrs.id,
+	id: this.$attrs.id,
     date: this.$attrs.id == 'created_date' ? new Date().toLocaleDateString() : ''
     }
   },
